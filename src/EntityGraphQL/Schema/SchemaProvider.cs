@@ -454,6 +454,8 @@ namespace EntityGraphQL.Schema
 
             if (!AuthUtil.IsAuthorized(claims, field.ReturnType.SchemaType.AuthorizeClaims))
                 throw new EntityGraphQLAccessException($"You do not have access to the '{field.ReturnType.SchemaType.Name}' type. You require any of the following security claims [{string.Join(", ", field.ReturnType.SchemaType.AuthorizeClaims.Claims.SelectMany(r => r))}]");
+            if (!AuthUtil.IsAuthorized(claims, field.AuthorizeClaims))
+                throw new EntityGraphQLAccessException($"You do not have access to the '{field.Name}' field. You require any of the following security claims [{string.Join(", ", field.AuthorizeClaims.Claims.SelectMany(r => r))}]");
 
             return field;
         }
