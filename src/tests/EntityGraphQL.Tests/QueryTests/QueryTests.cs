@@ -369,5 +369,41 @@ query {
             Assert.Equal("Dog", animals[0].__typename);
             Assert.Equal("Cat", animals[1].__typename);
         }
+
+
+        public class DeepContext
+        {
+            public IList<LevelOne> LevelOnes { get; set; }
+
+            public class LevelOne
+            {
+                public LevelTwo LevelTwo { get; set; }
+            }
+
+            public class LevelTwo
+            {
+                public ICollection<LevelThree> Level3 { get; set; }
+            }
+
+            public class LevelThree
+            {
+                public string Name { get; set; }
+            }
+        }
+
+        [Fact]
+        public void TestDeepQuery()
+        {
+            var schemaProvider = SchemaBuilder.FromObject<DeepContext>(false);
+            var gql = new QueryRequest
+            {
+                Query = @"query deep { levelOnes { levelTwo { level3 { name }} }}",
+            };
+
+            var testSchema = new DeepContext();
+
+            var results = schemaProvider.ExecuteRequest(gql, testSchema, null, null);
+            Assert.Null(results.Errors);
+        }
     }
 }
