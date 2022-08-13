@@ -136,6 +136,16 @@ namespace EntityGraphQL.Tests
         }
 
         [Fact]
+        public void TestSingleArgument_AutoAddInputTypes_NullableNestedType()
+        {
+            var schemaProvider = SchemaBuilder.FromObject<TestDataContext>();
+            schemaProvider.AddMutationsFrom<PeopleMutations>(true, true);
+            var schema = schemaProvider.ToGraphQLSchemaString();
+
+            Assert.Contains("addPersonNullableNestedType(nameInput: NestedInputObject!, nameInput2: NestedInputObject!): Person!", schemaProvider.ToGraphQLSchemaString());
+        }
+
+        [Fact]
         public void TestSeparateArguments_AutoAddInputTypes() {
             var schemaProvider = SchemaBuilder.FromObject<TestDataContext>();
             schemaProvider.AddMutationsFrom<PeopleMutations>(true);

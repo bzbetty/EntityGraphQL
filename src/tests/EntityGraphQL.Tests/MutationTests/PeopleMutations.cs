@@ -45,6 +45,16 @@ namespace EntityGraphQL.Tests
             return new Person { Name = string.IsNullOrEmpty(nameInput.Name) ? "Default" : nameInput.Name, Id = 555, Projects = new List<Project>() };
         }
 
+
+#nullable enable        
+        [GraphQLMutation]
+
+        public Person AddPersonNullableNestedType(NestedInputObject nameInput, NestedInputObject? nameInput2)
+        {
+            return new Person { Name = string.IsNullOrEmpty(nameInput.Name) ? "Default" : nameInput.Name, Id = 555, Projects = new List<Project>() };
+        }
+#nullable restore
+
         public class NestedInputObject {
             public string Name { get; set; }
             public string LastName { get; set; }
