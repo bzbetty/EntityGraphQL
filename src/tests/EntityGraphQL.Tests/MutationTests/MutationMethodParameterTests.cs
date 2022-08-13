@@ -2,6 +2,7 @@
 using EntityGraphQL.Schema;
 using System;
 using System.Linq;
+using static EntityGraphQL.Tests.PeopleMutations;
 
 namespace EntityGraphQL.Tests
 {
@@ -123,11 +124,11 @@ namespace EntityGraphQL.Tests
             schemaProvider.AddMutationsFrom<PeopleMutations>(true, true);
             // Add a argument field with a required parameter that is defined in a nested class
             var gql = new QueryRequest {
-                Query = @"mutation AddPersonSingleArgumentNestedType($nameInput: InputObject) {
+                Query = @"mutation AddPersonSingleArgumentNestedType($nameInput: NestedInputObject) {
                   addPersonSingleArgumentNestedType(nameInput: $nameInput) { id name }
                 }",
                 Variables = new QueryVariables {
-                    { "nameInput", new InputObject() { Name = "Frank" } },
+                    { "nameInput", new NestedInputObject() { Name = "Frank" } },
                 }
             };
             var res = schemaProvider.ExecuteRequest(gql, new TestDataContext(), null, null);
