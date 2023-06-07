@@ -19,11 +19,11 @@ namespace EntityGraphQL.Compiler
             this.SubscriptionField = subscriptionField;
         }
 
-        public Task<object?> ExecuteSubscriptionAsync<TContext>(TContext context, GraphQLValidator validator, IServiceProvider? serviceProvider, ParameterExpression? variableParameter, object? variablesToUse)
+        public async Task<object?> ExecuteSubscriptionAsync<TContext>(TContext context, GraphQLValidator validator, IServiceProvider? serviceProvider, ParameterExpression? variableParameter, object? variablesToUse)
         {
             try
             {
-                return SubscriptionField.CallAsync(context, Arguments, validator, serviceProvider, variableParameter, variablesToUse);
+                return await SubscriptionField.CallAsync(context, Arguments, validator, serviceProvider, variableParameter, variablesToUse);
             }
             catch (EntityQuerySchemaException e)
             {

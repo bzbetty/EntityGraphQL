@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EntityGraphQL.Schema;
+using EntityGraphQL.Extensions;
 using Xunit;
 
 namespace EntityGraphQL.Tests;
@@ -22,7 +23,7 @@ public class PersistedQueriesTests
                         }
                     }
                 }";
-        var hash = new QueryCache().ComputeHash(query);
+        var hash = query.ComputeHash();
 
         var gql = new QueryRequest
         {
@@ -65,7 +66,7 @@ public class PersistedQueriesTests
                         }
                     }
                 }";
-        var hash = new QueryCache().ComputeHash(query);
+        var hash = query.ComputeHash();
 
         var gql = new QueryRequest
         {
@@ -97,7 +98,7 @@ public class PersistedQueriesTests
                         }
                     }
                 }";
-        var hash = new QueryCache().ComputeHash(query);
+        var hash = query.ComputeHash();
 
         var gql = new QueryRequest
         {
@@ -128,7 +129,7 @@ public class PersistedQueriesTests
                         }
                     }
                 }";
-        var hash = new QueryCache().ComputeHash(query);
+        var hash = query.ComputeHash();
 
         var gql = new QueryRequest
         {

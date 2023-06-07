@@ -55,6 +55,7 @@ namespace EntityGraphQL.Tests
             var serviceCollection = new ServiceCollection();
             var ager = new AgeService();
             serviceCollection.AddSingleton(ager);
+            serviceCollection.AddSingleton(new DelegateCache());
             var res = schema.ExecuteRequest(gql, contextData, serviceCollection.BuildServiceProvider(), null, new ExecutionOptions { ExecuteServiceFieldsSeparately = false });
             Assert.Null(res.Errors);
             dynamic customers = res.Data["customers"];

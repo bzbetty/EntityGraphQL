@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EntityGraphQL.Compiler.Util;
 using EntityGraphQL.Extensions;
 using EntityGraphQL.Schema;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EntityGraphQL.Compiler
 {
@@ -224,17 +225,20 @@ namespace EntityGraphQL.Compiler
                     ifFalse: Expression.Constant(null, typeof(System.Collections.Generic.List<>).MakeGenericType(expression.Type.GetEnumerableOrArrayType()!))
               );
             }
-
+            
             var lambdaExpression = Expression.Lambda(expression, parameters.ToArray());
 #if DEBUG
             if (options.NoExecution)
                 return (null, false);
 #endif
+
+            var delegateCache = serviceProvider?.GetService<DelegateCache>();
+
             object? res = null;
             if (lambdaExpression.ReturnType.IsGenericType && lambdaExpression.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
-                res = await (dynamic?)lambdaExpression.Compile().DynamicInvoke(allArgs.ToArray());
+                res = await (dynamic?)lambdaExpression.CompileAndCache(delegateCache, options.EnableDelegateCache).DynamicInvoke(allArgs.ToArray());
             else
-                res = lambdaExpression.Compile().DynamicInvoke(allArgs.ToArray());
+                res = lambdaExpression.CompileAndCache(delegateCache, options.EnableDelegateCache).DynamicInvoke(allArgs.ToArray());
 
             return (res, true);
         }

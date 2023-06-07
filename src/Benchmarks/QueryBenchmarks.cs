@@ -31,6 +31,87 @@ namespace Benchmarks
         }
 
         [Benchmark]
+        public void Query_SingleObjectWithArg_NoCache()
+        {
+            RunQuery(GetContext(), new QueryRequest
+            {
+                Query = @"{
+                    movie(id: ""433f8132-a7a5-40c9-96c2-e2122fb72e68"") {
+                        id name released
+                    }
+                }"
+            }, new ExecutionOptions
+            {
+                EnableQueryCache = false,
+                EnableDelegateCache = false,
+#if DEBUG
+                NoExecution = true
+#endif
+            });
+        }
+
+
+        [Benchmark]
+        public void Query_SingleObjectWithArg_QueryCache()
+        {
+            RunQuery(GetContext(), new QueryRequest
+            {
+                Query = @"{
+                    movie(id: ""433f8132-a7a5-40c9-96c2-e2122fb72e68"") {
+                        id name released
+                    }
+                }"
+            }, new ExecutionOptions
+            {
+                EnableQueryCache = true,
+                EnableDelegateCache = false,
+#if DEBUG
+                NoExecution = true
+#endif
+            });
+        }
+
+        [Benchmark]
+        public void Query_SingleObjectWithArg_DelegateCache()
+        {
+            RunQuery(GetContext(), new QueryRequest
+            {
+                Query = @"{
+                    movie(id: ""433f8132-a7a5-40c9-96c2-e2122fb72e68"") {
+                        id name released
+                    }
+                }"
+            }, new ExecutionOptions
+            {
+                EnableQueryCache = false,
+                EnableDelegateCache = true,
+#if DEBUG
+                NoExecution = true
+#endif
+            });
+        }
+
+        [Benchmark]
+        public void Query_SingleObjectWithArg_AllCache()
+        {
+            RunQuery(GetContext(), new QueryRequest
+            {
+                Query = @"{
+                    movie(id: ""433f8132-a7a5-40c9-96c2-e2122fb72e68"") {
+                        id name released
+                    }
+                }"
+            }, new ExecutionOptions
+            {
+                EnableQueryCache = true,
+                EnableDelegateCache = true,
+#if DEBUG
+                NoExecution = true
+#endif
+            });
+        }
+
+        [Benchmark]
         public void Query_SingleObjectWithArg_IncludeSubObject()
         {
             RunQuery(GetContext(), new QueryRequest
